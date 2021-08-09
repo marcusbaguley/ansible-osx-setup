@@ -26,6 +26,7 @@
       ignore_errors: yes
       with_items:
         - 1password
+        - authy
         - adoptopenjdk/openjdk/adoptopenjdk8
         - android-sdk
         - android-studio
@@ -37,26 +38,20 @@
         - google-cloud-sdk
         - graphql-playground
         - iterm2
-        - kindle
-        - microsoft-office
         - ngrok
         - osxfuse
         - postico
-        - postman
-        - rstudio
-        - sketch
         - slack
-        - sublime-text
         - telegram
         - tunnelblick
-        - vagrant
-        - virtualbox
         - visual-studio-code
         - vlc
         - zeplin
-        - zoomus
+        - zoom
+        - microsoft-teams
 
     - name: "Install homebrew packages"
+      tags: brew
       community.general.homebrew:
         name: [
           'autoconf',
@@ -87,18 +82,17 @@
           'openssl' ,
           'pkg-config',
           'postgresql',
+          'jq',
           'r',
           'rcm',
           'readline',
-          'redis',
           'sqlite3',
-          'sshfs',
-          'terraform',
           'tmux',
           'unixodbc',
           'unzip',
           'vim',
           'watchman',
+          'wget',
           'weaveworks/tap/eksctl',
           'xz',
           'yarn',
@@ -170,7 +164,6 @@
         - richie5um2.vscode-sort-json
         - Tyriar.sort-lines
         - vscodevim.vim
-        - vscoss.vscode-ansible
         - wholroyd.jinja
         - wingrunr21.vscode-ruby
         - xabikos.javascriptsnippets

@@ -1,7 +1,8 @@
 #!/bin/sh
 xcode-select --install
 sudo xcodebuild -license
-sudo easy_install pip
+sudo pip3 install --upgrade pip
+pip3 install ansible
 pip install --ignore-installed ansible
 ansible-galaxy install -r requirements.yml
 
