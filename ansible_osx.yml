@@ -79,7 +79,8 @@
           'libyaml',
           'mas',
           'mysql',
-          'openssl' ,
+          'openssl',
+          'pick',
           'pkg-config',
           'postgresql',
           'jq',
@@ -280,3 +281,15 @@
         - "platforms;android-28"
         - "system-images;android-23;google_apis;x86"
         - "system-images;android-26;google_apis;x86"
+    - name: Install session manager plugin
+      tags: aws
+      args:
+        creates: /usr/local/bin/session-manager-plugin
+      become: true
+      shell: |
+        mkdir -p /Users/{{ lookup('env', 'USER') }}/tmp-sm
+        cd /Users/{{ lookup('env', 'USER') }}/tmp-sm
+        curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessionmanager-bundle.zip" -o "sessionmanager-bundle.zip"
+        unzip sessionmanager-bundle.zip
+        ./sessionmanager-bundle/install -i /usr/local/sessionmanagerplugin -b /usr/local/bin/session-manager-plugin
+        #rm -rf /Users/{{ lookup('env', 'USER') }}/tmp-sm
