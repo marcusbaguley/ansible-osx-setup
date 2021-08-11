@@ -198,6 +198,7 @@
         - nodejs
         - python
         - erlang
+        - terraform
 
     - name: "Install Default Python"
       shell: |
@@ -243,6 +244,11 @@
         asdf global elixir 1.11.2
         mix local.hex --force
         mix archive.install hex phx_new 1.5.7 --force
+
+    - name: "Install terraform"
+      shell: |
+        source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+        asdf install terraform 0.13.4
 
     - name: Install yarn packages
       shell: yarn global add {{ item }} --prefix /usr/local
