@@ -10,6 +10,12 @@ There's a simple shell script in `bin/bootstrap` which will perform the initial 
 2. Installing Ansible
 3. Fetching required Ansible roles and collections
 
+Had to add to path and before bootstrap
+
+Set up PATH: `export PATH=$PATH:/Users/marcusbaguley/Library/Python/3.8/bin`
+For Docker - run Docker for Mac to complete installation and setup command line tools.
+Installation of ruby with asdf - current open ssl issue: https://github.com/openssl/openssl/issues/18720#issuecomment-1185940347
+
 And then runs the main playbook `ansible_osx.yml`.
 
 For future updates, `bin/apply` can be used to run just the Ansible playbook without the setup commands.
@@ -29,4 +35,3 @@ The easiest way to understand what's installed is to read the contents of `ansib
 ## Customising
 
 Everything can be customised by editing `ansible_osx.yml`.
-

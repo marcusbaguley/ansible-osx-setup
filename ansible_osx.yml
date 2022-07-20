@@ -89,6 +89,7 @@
           'readline',
           'sqlite3',
           'tmux',
+          'tmuxinator',
           'the_silver_searcher',
           'unixodbc',
           'unzip',
@@ -138,19 +139,19 @@
         owner: "{{ lookup('env', 'USER') }}"
         force: yes
 
-    - name: Create a default VSCode configuration
-      template:
-        src: templates/vscode-settings.json.j2
-        dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/settings.json
-        owner: "{{ lookup('env', 'USER') }}"
-        force: no
+        #- name: Create a default VSCode configuration
+        #  template:
+        #    src: templates/vscode-settings.json.j2
+        #    dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/settings.json
+        #    owner: "{{ lookup('env', 'USER') }}"
+        #    force: no
 
-    - name: Create a default VSCode keuybinding configuration
-      template:
-        src: templates/vscode-keybindings.json.j2
-        dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/keybindings.json
-        owner: "{{ lookup('env', 'USER') }}"
-        force: no
+        #- name: Create a default VSCode keuybinding configuration
+        #  template:
+        #    src: templates/vscode-keybindings.json.j2
+        #    dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/keybindings.json
+        #    owner: "{{ lookup('env', 'USER') }}"
+        #    force: no
 
     - name: Install VSCode extensions
       shell: code --install-extension {{ item }}
