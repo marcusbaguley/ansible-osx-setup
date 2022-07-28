@@ -67,6 +67,7 @@
           'erlang',
           'fzf',
           'gnu-time',
+          'gh',
           'gpg',
           'heroku',
           'htop',
