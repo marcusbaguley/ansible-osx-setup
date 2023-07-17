@@ -1,0 +1,99 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Install homebrew
+      include_role:
+        name: geerlingguy.homebrew
+
+    - name: 'add custom homebrew repos'
+      community.general.homebrew_tap:
+        name: [
+          adoptopenjdk/openjdk,
+          fishtown-analytics/dbt,
+          heroku/brew,
+          homebrew/cask-versions,
+          thoughtbot/formulae,
+          weaveworks/tap,
+        ]
+
+    - name: Install core packages via brew casks
+      tags: core
+      community.general.homebrew_cask:
+        name: "{{ item }}"
+        ignore_errors: yes
+        with_items:
+          - dash
+          - docker
+          - google-chrome
+          - iterm2
+          - slack
+          - visual-studio-code
+          - vlc
+          - zeplin
+          - microsoft-teams
+
+    - name: "Install homebrew packages"
+      tags: brew
+      community.general.homebrew:
+        name: [
+          'autoconf',
+          'automake',
+          'aws-iam-authenticator',
+          'awscli',
+          'azure-cli',
+          'bfg',
+          'coreutils',
+          'curl',
+          'dbt@0.18.0',
+          'direnv',
+          'dnsmasq',
+          'fzf',
+          'gnu-time',
+          'gh',
+          'gpg',
+          'htop',
+          'kubectx',
+          'kubernetes-cli',
+          'kubernetes-helm',
+          'libtool',
+          'libxslt',
+          'libyaml',
+          'mas',
+          'openssl',
+          'pick',
+          'pkg-config',
+          'postgresql',
+          'jq',
+          'r',
+          'rcm',
+          'readline',
+          'sqlite3',
+          'tmux',
+          'tmuxinator',
+          'the_silver_searcher',
+          'unixodbc',
+          'unzip',
+          'vim',
+          'watchman',
+          'wget',
+          'weaveworks/tap/eksctl',
+          'xz',
+          'yarn',
+          'zlib',
+          'zsh',
+        ]
+      path: '/usr/local/bin:/opt/homebrew/bin'
+      state: present
+      update_homebrew: yes
+
+    - name: Get the path to ZSH
+      tags: zsh
+      become: false
+      local_action: command which zsh
+      register: zsh_path
+
+    - name: "Ensure homebrew zsh is in allowed shells"
+      lineinfile:
+        path: /etc/shells
+        line: "{{ zsh_path.stdout }}"
+      become: true
