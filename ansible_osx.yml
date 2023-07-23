@@ -52,6 +52,7 @@
         - elixir
         - nodejs
         - terraform
+        - aws-sam-cli
 
     - name: Install session manager plugin
       tags: aws
