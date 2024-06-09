@@ -1,14 +1,118 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Install homebrew
-      include_role:
-        name: geerlingguy.homebrew
+    - name: Check if Homebrew is installed
+      shell: which brew
+      register: homebrew_check
+      ignore_errors: yes
 
-    - name: Setup dnsmasq
-      include_role:
-        name: dnsmasq
+    - name: Install Homebrew
+      shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      when: homebrew_check.rc != 0
 
+    - name: Ensure Homebrew is in the PATH
+      shell: echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/{{ ansible_user_id }}/.zprofile
+      when: homebrew_check.rc != 0
+
+    - name: Update Homebrew to the latest version
+      shell: brew update
+      when: homebrew_check.rc == 0 or (homebrew_check.rc != 0 and ansible_user_id == "your_username")
+
+  #name: Setup dnsmasq
+    # include_role:
+    #   name: dnsmasq
+
+<<<<<<< HEAD
+=======
+    - name: 'add custom homebrew repos'
+      community.general.homebrew_tap:
+        name: [
+          homebrew/cask-versions,
+          thoughtbot/formulae,
+          weaveworks/tap,
+        ]
+
+    - name: Install core packages via brew casks
+      community.general.homebrew_cask:
+        name: "{{ item }}"
+      ignore_errors: yes
+      with_items:
+        - 1password
+        - iterm2
+        # - ngrok
+        # - osxfuse
+        # - postico
+        - slack
+        # - telegram
+        # - tunnelblick
+        - visual-studio-code
+        # - vlc
+        # - zeplin
+        # - zoom
+        # - microsoft-teams
+
+    - name: "Install homebrew packages"
+      tags: brew
+      community.general.homebrew:
+        name: [
+          'autoconf',
+          'automake',
+          'aws-iam-authenticator',
+          'awscli',
+          'bfg',
+          'coreutils',
+          'curl',
+          'dbt@0.18.0',
+          'direnv',
+          'dnsmasq',
+          'erlang',
+          'fzf',
+          'gnu-time',
+          'gpg',
+          'htop',
+          'libtool',
+          'libxslt',
+          'libyaml',
+          'mas',
+          'openssl',
+          'pick',
+          'jq',
+          'r',
+          'rcm',
+          'readline',
+          'sqlite3',
+          'siege',
+          'tmux',
+          'the_silver_searcher',
+          'unzip',
+          'vim',
+          'watchman',
+          'wget',
+          'weaveworks/tap/eksctl',
+          'xz',
+          'yarn',
+          'zlib',
+          'zsh',
+        ]
+        state: present
+        update_homebrew: yes
+
+    - name: "Link ImageMagick6 as main version (for rmagick gem)"
+      shell: brew link -f imagemagick@6
+
+    - name: Get the path to ZSH
+      tags: zsh
+      become: false
+      local_action: command which zsh
+      register: zsh_path
+
+    - name: "Ensure homebrew zsh is in allowed shells"
+      lineinfile:
+        path: /etc/shells
+        line: "{{ zsh_path.stdout }}"
+      become: true
+
+>>>>>>> a42a82a (slim down)
     - name: Install Oh My ZSH
       tags: zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -28,9 +132,13 @@
         owner: "{{ lookup('env', 'USER') }}"
         force: yes
 
+<<<<<<< HEAD
     - name: "Install asdf"
       tags: asdf1
       git:
+=======
+    - git:
+>>>>>>> a42a82a (slim down)
         repo: https://github.com/asdf-vm/asdf.git
         dest: "/Users/{{ lookup('env', 'USER') }}/.asdf"
 
@@ -49,9 +157,9 @@
         asdf plugin-add {{ item }} || exit 0
       with_items:
         - ruby
-        - elixir
         - nodejs
         - terraform
+        - kubectl
         - aws-sam-cli
 
     - name: Install session manager plugin
@@ -66,3 +174,31 @@
         unzip sessionmanager-bundle.zip
         sudo ./sessionmanager-bundle/install -i /usr/local/sessionmanagerplugin -b /usr/local/bin/session-manager-plugin
         rm -rf /Users/{{ lookup('env', 'USER') }}/tmp-sm
+
+    - name: "Install Default Python"
+      shell: |
+        source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+        asdf install python 3.12.3
+        asdf global python 3.12.3
+        pip3 install boto
+        pip3 isntall numpy
+        pip3 install scipy
+        pip3 install matplotlib
+        pip3 install ipython
+        pip3 install jupyter
+        pip3 install pandas
+        pip3 install sympy
+        pip3 install nose
+        pip3 install scikit-learn
+        asdf reshim python
+
+    - name: "Install Default Ruby"
+      shell: |
+        source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+        asdf install ruby 3.2.1
+        asdf global ruby 3.2.1
+        gem install bundler
+        gem install cocoapods
+        gem install rubocop
+        gem install solargraph
+        gem install standard
