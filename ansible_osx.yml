@@ -22,8 +22,6 @@
     # include_role:
     #   name: dnsmasq
 
-<<<<<<< HEAD
-=======
     - name: 'add custom homebrew repos'
       community.general.homebrew_tap:
         name: [
@@ -59,6 +57,7 @@
           'automake',
           'aws-iam-authenticator',
           'awscli',
+          'ack',
           'bfg',
           'coreutils',
           'curl',
@@ -112,7 +111,6 @@
         line: "{{ zsh_path.stdout }}"
       become: true
 
->>>>>>> a42a82a (slim down)
     - name: Install Oh My ZSH
       tags: zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -132,13 +130,9 @@
         owner: "{{ lookup('env', 'USER') }}"
         force: yes
 
-<<<<<<< HEAD
     - name: "Install asdf"
       tags: asdf1
       git:
-=======
-    - git:
->>>>>>> a42a82a (slim down)
         repo: https://github.com/asdf-vm/asdf.git
         dest: "/Users/{{ lookup('env', 'USER') }}/.asdf"
 
